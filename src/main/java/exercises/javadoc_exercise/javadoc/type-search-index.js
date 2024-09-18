@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"exercises.javadoc_exercise","l":"BankAccount"},{"p":"exercises.javadoc_exercise","l":"InvalidAccountException"}];updateSearchResults();
