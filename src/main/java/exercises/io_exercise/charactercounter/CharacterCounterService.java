@@ -1,4 +1,4 @@
-package io_exercise.charactercounter;
+package exercises.io_exercise.charactercounter;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,7 +18,7 @@ public class CharacterCounterService {
         return count;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         System.out.println(countCharacter("sample_file.txt", 'i'));
     }
 }
