@@ -47,7 +47,7 @@ public class EmailUtil {
             logger.info("Email sent successfully!");
 
         } catch (MessagingException e) {
-            logger.log(Level.SEVERE, "Failed to send email to " + to, e);
+            logger.log(Level.SEVERE, e, () -> String.format("Failed to send email to %s", to));
             throw new MessagingException("Failed to send email to " + to);
         }
     }

@@ -11,6 +11,7 @@ public class SafetyDepositBoxService {
     private static SafetyDepositBoxService safetyDepositBoxService;
     private List<SafetyDepositBox> safetyDepositBoxes;
     private static int numberOfSafetyDepositBoxes = 2;
+    private AlertService alertService;
 
     private SafetyDepositBoxService(){
         safetyDepositBoxes = new ArrayList<>();
@@ -21,6 +22,8 @@ public class SafetyDepositBoxService {
             sb.setAllotted(false);
             safetyDepositBoxes.add(sb);
         }
+
+        alertService = new AlertService();
     }
 
     public static SafetyDepositBoxService getInstance(){
@@ -31,7 +34,7 @@ public class SafetyDepositBoxService {
         return safetyDepositBoxService;
     }
 
-    public static int getNumberOfSafetyDepositBoxes() {
+    public static synchronized int getNumberOfSafetyDepositBoxes() {
         return numberOfSafetyDepositBoxes;
     }
 
@@ -41,11 +44,12 @@ public class SafetyDepositBoxService {
 
     public synchronized SafetyDepositBox allocateSafetyDepositBox() throws InterruptedException {
         Optional<SafetyDepositBox> safetyDepositBox = getReleasedSafetyDepositBox();
-        boolean isWaiting = false; // just for testing purposes
 
         if(safetyDepositBox.isPresent()){
             SafetyDepositBox sb = safetyDepositBox.get();
             sb.setAllotted(true);
+
+            alertService.sendDepositBoxAlert(sb, true);
 
             return sb;
         }
@@ -56,12 +60,12 @@ public class SafetyDepositBoxService {
                 sb.setAllotted(true);
                 safetyDepositBoxes.add(sb);
 
+                alertService.sendDepositBoxAlert(sb,true);
+
                 return sb;
             }
             else{
-                isWaiting = true;
                 wait();
-                isWaiting = false;
 
                 return getReleasedSafetyDepositBox().orElseThrow(() -> new IllegalStateException("No Boxes found!"));
             }
@@ -72,11 +76,9 @@ public class SafetyDepositBoxService {
         for(SafetyDepositBox box:safetyDepositBoxes){
             if(box.equals(safetyDepositBox)){
                 box.setAllotted(false);
+                alertService.sendDepositBoxAlert(box, false);
             }
         }
-
-        notify();
-        // safetyDepositBoxes.remove(safetyDepositBox);
     }
 
     public int getNumberOfAvailableSafetyDepositBoxes(){
@@ -98,7 +100,7 @@ public class SafetyDepositBoxService {
             }
         }
 
-        return null;
+        return Optional.of(null);
     }
 
     public List<SafetyDepositBox> getSafetyDepositBoxes() {
