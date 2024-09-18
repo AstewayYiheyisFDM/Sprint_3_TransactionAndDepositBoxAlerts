@@ -1,18 +1,19 @@
 package model;
 
-import service.AccountService;
-import service.AccountServiceImpl;
+import jakarta.mail.MessagingException;
 import service.AlertService;
 import service.BankService;
 
 public class CheckingAccount extends Account {
     private int nextCheckNumber;
     private static final double MIN_BALANCE = 100.00;
+    AlertService alertService;
 
     public CheckingAccount(double balance, Customer customer){
         // it will start at 1 since the first call to getNextCheckNumber will return 1
         super(balance, customer);
         this.nextCheckNumber = 0;
+        alertService = new AlertService();
     }
 
     public int getNextCheckNumber() {
@@ -24,11 +25,11 @@ public class CheckingAccount extends Account {
     }
 
     @Override
-    public double withdraw(double amount){
+    public double withdraw(double amount) throws MessagingException {
         double currentAmount = this.balance - amount;
 
         if(currentAmount < MIN_BALANCE){
-            BankService.notify(this, amount);
+            alertService.sendTransactionAlert(this.getCustomer().getCUSTOMER_ID(),this, amount);
         }
 
         this.balance = currentAmount;

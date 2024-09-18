@@ -1,5 +1,7 @@
 package model;
 
+import jakarta.mail.MessagingException;
+
 public class Company extends Customer{
     public Company(String name, String address, String emailAddress) {
         super(name, address, emailAddress);
@@ -9,10 +11,18 @@ public class Company extends Customer{
     public void chargeAllAccounts(double amount){
         this.getAccounts().forEach(a -> {
             if(a instanceof CheckingAccount){
-                a.withdraw(amount);
+                try {
+                    a.withdraw(amount);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
             }
             else if(a instanceof SavingsAccount){
-                a.withdraw(amount * 2);
+                try {
+                    a.withdraw(amount * 2);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

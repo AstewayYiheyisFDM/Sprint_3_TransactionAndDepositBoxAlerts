@@ -18,8 +18,6 @@ public class SavingsAccount extends Account{
     @Override
     public double withdraw(double amount){
         if(balance - amount < 0){
-            // for anticipated future changes
-//            throw new OverLimitWithdrawalException("Withdraw Amount is over the current balance!");
             return 0;
         }
 

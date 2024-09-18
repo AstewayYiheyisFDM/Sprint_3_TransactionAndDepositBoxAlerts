@@ -4,7 +4,7 @@ import jakarta.mail.MessagingException;
 import model.Account;
 
 public class BankService {
-    private static AlertService alertService;
+    private AlertService alertService;
 
     public BankService(AlertService alertService){
         this.alertService = alertService;
@@ -13,16 +13,16 @@ public class BankService {
     public void deposit(Account account, double amount) {
         account.deposit(amount);
 
-        BankService.notify(account, amount);
+        notifyTransaction(account, amount);
     }
 
-    public void withdraw(Account account, double amount) {
+    public void withdraw(Account account, double amount) throws MessagingException {
         account.withdraw(amount);
 
-        BankService.notify(account, amount);
+        notifyTransaction(account, amount);
     }
 
-    public static void notify(Account account, double amount) {
+    public void notifyTransaction(Account account, double amount) {
         try{
             alertService.sendTransactionAlert(account.getCustomer().getCUSTOMER_ID(), account, amount);
         }
