@@ -1,0 +1,54 @@
+package util;
+
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
+
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class EmailUtil {
+    private static final Logger logger = Logger.getLogger(EmailUtil.class.getName());
+
+    private EmailUtil(){
+    }
+
+    // Send email to the specified email ID
+    public static void sendEmail(String to, String subject, String body) throws MessagingException {
+        // Set up properties for the email
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.example.com");  // Replace with actual SMTP host
+        properties.put("mail.smtp.port", "587"); // Replace with the correct SMTP port (e.g., 465 for SSL or 587 for TLS)
+
+        // Authenticator for the session
+        final String username = "testmailforproject1234@gmail.com"; // Replace with your email
+        final String password = "ddtnwcjxygemsfyw"; // Replace with your email password or app-specific password
+
+        Session session = Session.getInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+
+        try {
+            // Compose the email
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+            message.setSubject(subject);
+            message.setText(body);
+
+            // Send the email
+            Transport.send(message);
+            logger.info("Email sent successfully!");
+
+        } catch (MessagingException e) {
+            logger.log(Level.SEVERE, "Failed to send email to " + to, e);
+            throw new MessagingException("Failed to send email to " + to);
+        }
+    }
+}
