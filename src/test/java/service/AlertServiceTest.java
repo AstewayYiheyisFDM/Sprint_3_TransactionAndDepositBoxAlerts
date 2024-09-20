@@ -1,10 +1,7 @@
 package service;
 
 import jakarta.mail.MessagingException;
-import model.Account;
-import model.Customer;
-import model.SafetyDepositBox;
-import model.SmallSafetyDepositBox;
+import model.*;
 import org.junit.Test;
 import util.SampleDataUtil;
 
@@ -30,7 +27,7 @@ public class AlertServiceTest {
     @Test
     public void test_sendTransactionAlert() throws MessagingException {
         alertService.sendTransactionAlert(customers.get(0).getCUSTOMER_ID(),
-                accounts.get(0), 100.00);
+                accounts.get(0), 100.00, TransactionType.DEPOSIT);
     }
 
     @Test
@@ -43,7 +40,7 @@ public class AlertServiceTest {
     public void test_generateTransactionAlertMessage(){
         Account account = accounts.get(0);
         String expectedMessage = String.format(
-                "Hello %s,%n%nWe would like to notify you of a recent transaction on your account.%n%n" +
+                "Hello %s,%n%nWe would like to notify you of a recent Deposit on your account.%n%n" +
                         "Transaction Details:%n- Amount: $%.2f%n- Account Number: %d%n- New Balance: $%.2f%n%n" +
                         "Thank you for banking with us.%n%nBest regards,%nYour Bank",
                 customers.get(0).getName(),
@@ -52,7 +49,7 @@ public class AlertServiceTest {
                 account.getBalance()
         );
 
-        assertEquals(expectedMessage, alertService.generateTransactionAlertMessage(customers.get(0), accounts.get(0), 100.00));
+        assertEquals(expectedMessage, alertService.generateTransactionAlertMessage(customers.get(0), accounts.get(0), 100.00, TransactionType.DEPOSIT));
     }
 
     @Test

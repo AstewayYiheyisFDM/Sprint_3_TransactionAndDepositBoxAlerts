@@ -3,6 +3,7 @@ package service;
 import jakarta.mail.MessagingException;
 import model.Account;
 import model.Person;
+import model.TransactionType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -28,12 +29,12 @@ public class BankServiceTest{
     @Test
     public void test_when_deposit_isCalled_sendTransactionAlert_isCalled() throws MessagingException {
         bankService.withdraw(account, 100.00);
-        Mockito.verify(alertService).sendTransactionAlert(p.getCUSTOMER_ID(), account, 100.00);
+        Mockito.verify(alertService).sendTransactionAlert(p.getCUSTOMER_ID(), account, 100.00, TransactionType.DEPOSIT);
     }
 
     @Test
     public void test_when_withdraw_isCalled_sendTransactionAlert_isCalled() throws MessagingException {
         bankService.deposit(account, 300.00);
-        Mockito.verify(alertService).sendTransactionAlert(p.getCUSTOMER_ID(), account, 300.00);
+        Mockito.verify(alertService).sendTransactionAlert(p.getCUSTOMER_ID(), account, 300.00, TransactionType.WITHDRAW);
     }
 }

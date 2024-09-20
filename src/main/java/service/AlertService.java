@@ -4,6 +4,7 @@ import jakarta.mail.MessagingException;
 import model.Account;
 import model.Customer;
 import model.SafetyDepositBox;
+import model.TransactionType;
 import util.EmailUtil;
 
 import java.util.List;
@@ -22,14 +23,14 @@ public class AlertService {
         this.customers = customers;
     }
 
-    public void sendTransactionAlert(Long customerId, Account account, double amount) throws MessagingException {
+    public void sendTransactionAlert(Long customerId, Account account, double amount, TransactionType transactionType) throws MessagingException {
         Optional<Customer> customer = customers.stream().filter(c -> c.getCUSTOMER_ID() == customerId).findFirst();
 
         if (customer.isPresent()) {
             Customer c = customer.get();
             try {
                 EmailUtil.sendEmail(c.getEmailAddress(), "Transaction Alert!",
-                        generateTransactionAlertMessage(c, account, amount));
+                        generateTransactionAlertMessage(c, account, amount, transactionType));
             } catch (MessagingException ex) {
                 ex.printStackTrace();
             }
@@ -45,9 +46,10 @@ public class AlertService {
         }
     }
 
-    public String generateTransactionAlertMessage(Customer customer, Account account, double amount) {
+    public String generateTransactionAlertMessage(Customer customer, Account account, double amount, TransactionType transactionType) {
+        String type = transactionType == TransactionType.DEPOSIT ? "Deposit" : "Withdrawal";
         return String.format(
-                "Hello %s,%n%nWe would like to notify you of a recent transaction on your account.%n%n" +
+                "Hello %s,%n%nWe would like to notify you of a recent " + type + " on your account.%n%n" +
                         "Transaction Details:%n- Amount: $%.2f%n- Account Number: %d%n- New Balance: $%.2f%n%n" +
                         "Thank you for banking with us.%n%nBest regards,%nYour Bank",
                 customer.getName(),

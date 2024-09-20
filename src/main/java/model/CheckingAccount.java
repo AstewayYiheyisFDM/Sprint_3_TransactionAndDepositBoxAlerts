@@ -28,7 +28,7 @@ public class CheckingAccount extends Account {
         double currentAmount = this.balance - amount;
 
         if(currentAmount < MIN_BALANCE){
-            alertService.sendTransactionAlert(this.getCustomer().getCUSTOMER_ID(),this, amount);
+            alertService.sendTransactionAlert(this.getCustomer().getCUSTOMER_ID(),this, amount, TransactionType.WITHDRAW);
         }
 
         this.balance = currentAmount;
