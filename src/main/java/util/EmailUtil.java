@@ -26,7 +26,7 @@ public class EmailUtil {
 
         // Authenticator for the session
         final String username = "testmailforproject1234@gmail.com"; // Replace with your email
-        final String password = "tepb syfc qean qant"; // Replace with your email password or app-specific password
+        final String password = System.getenv("SMTP_PASSWORD"); // Replace with your email password or app-specific password
 
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
