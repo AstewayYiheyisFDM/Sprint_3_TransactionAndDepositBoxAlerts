@@ -45,11 +45,11 @@ public class AlertService {
         }
     }
 
-    private String generateTransactionAlertMessage(Customer customer, Account account, double amount) {
+    public String generateTransactionAlertMessage(Customer customer, Account account, double amount) {
         return String.format(
-                "Hello %s,\n\nWe would like to notify you of a recent transaction on your account.\n\n" +
-                        "Transaction Details:\n- Amount: $%.2f\n- Account Number: %d\n- New Balance: $%.2f\n\n" +
-                        "Thank you for banking with us.\nBest regards,\nYour Bank",
+                "Hello %s,%n%nWe would like to notify you of a recent transaction on your account.%n%n" +
+                        "Transaction Details:%n- Amount: $%.2f%n- Account Number: %d%n- New Balance: $%.2f%n%n" +
+                        "Thank you for banking with us.%n%nBest regards,%nYour Bank",
                 customer.getName(),
                 amount,
                 account.getACCOUNT_ID(),
