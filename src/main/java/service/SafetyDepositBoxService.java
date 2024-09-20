@@ -1,5 +1,6 @@
 package service;
 
+import model.Customer;
 import model.SafetyDepositBox;
 import model.SmallSafetyDepositBox;
 
@@ -42,11 +43,12 @@ public class SafetyDepositBoxService {
         SafetyDepositBoxService.numberOfSafetyDepositBoxes = numberOfSafetyDepositBoxes;
     }
 
-    public synchronized SafetyDepositBox allocateSafetyDepositBox() throws InterruptedException {
+    public synchronized SafetyDepositBox allocateSafetyDepositBox(Customer customer) throws InterruptedException {
         Optional<SafetyDepositBox> safetyDepositBox = getReleasedSafetyDepositBox();
 
         if(safetyDepositBox.isPresent()){
             SafetyDepositBox sb = safetyDepositBox.get();
+            sb.setCustomer(customer);
             sb.setAllotted(true);
 
             alertService.sendDepositBoxAlert(sb, true);
@@ -57,6 +59,7 @@ public class SafetyDepositBoxService {
             // if the limit has not been reached, create a new safety deposit box and return it
             if(numberOfSafetyDepositBoxes > safetyDepositBoxes.size()){
                 SafetyDepositBox sb = new SmallSafetyDepositBox();
+                sb.setCustomer(customer);
                 sb.setAllotted(true);
                 safetyDepositBoxes.add(sb);
 
@@ -76,6 +79,7 @@ public class SafetyDepositBoxService {
         for(SafetyDepositBox box:safetyDepositBoxes){
             if(box.equals(safetyDepositBox)){
                 box.setAllotted(false);
+                box.setCustomer(null);
                 alertService.sendDepositBoxAlert(box, false);
             }
         }
@@ -106,6 +110,4 @@ public class SafetyDepositBoxService {
     public List<SafetyDepositBox> getSafetyDepositBoxes() {
         return safetyDepositBoxes;
     }
-
-
 }
