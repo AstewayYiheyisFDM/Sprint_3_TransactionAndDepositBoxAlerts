@@ -19,13 +19,14 @@ public class EmailUtil {
         // Set up properties for the email
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtp.example.com");  // Replace with actual SMTP host
-        properties.put("mail.smtp.port", "587"); // Replace with the correct SMTP port (e.g., 465 for SSL or 587 for TLS)
+        properties.put("mail.smtp.starttls.enable", "true"); // Enable STARTTLS
+        properties.put("mail.smtp.host", "smtp.gmail.com");   // Google's SMTP host
+        properties.put("mail.smtp.port", "587");              // Port for TLS
+        properties.put("mail.smtp.ssl.trust", "smtp.gmail.com"); // Trust Gmail's SSL certificates
 
         // Authenticator for the session
         final String username = "testmailforproject1234@gmail.com"; // Replace with your email
-        final String password = "ddtnwcjxygemsfyw"; // Replace with your email password or app-specific password
+        final String password = "tepb syfc qean qant"; // Replace with your email password or app-specific password
 
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override

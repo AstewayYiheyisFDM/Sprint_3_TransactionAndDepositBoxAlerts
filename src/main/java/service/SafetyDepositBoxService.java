@@ -18,8 +18,7 @@ public class SafetyDepositBoxService {
         safetyDepositBoxes = new ArrayList<>();
 
         for(int i = 0; i < numberOfSafetyDepositBoxes; i++){
-            SmallSafetyDepositBox sb = new SmallSafetyDepositBox();
-            sb.setId(i);
+            SmallSafetyDepositBox sb = new SmallSafetyDepositBox(i);
             sb.setAllotted(false);
             safetyDepositBoxes.add(sb);
         }
@@ -56,9 +55,10 @@ public class SafetyDepositBoxService {
             return sb;
         }
         else{
+            int size = safetyDepositBoxes.size();
             // if the limit has not been reached, create a new safety deposit box and return it
-            if(numberOfSafetyDepositBoxes > safetyDepositBoxes.size()){
-                SafetyDepositBox sb = new SmallSafetyDepositBox();
+            if(numberOfSafetyDepositBoxes > size){
+                SafetyDepositBox sb = new SmallSafetyDepositBox(size + 1);
                 sb.setCustomer(customer);
                 sb.setAllotted(true);
                 safetyDepositBoxes.add(sb);

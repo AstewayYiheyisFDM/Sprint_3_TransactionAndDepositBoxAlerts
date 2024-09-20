@@ -14,9 +14,9 @@ public class SampleDataUtil {
 
     public static List<Customer> getSampleCustomers() {
         return Arrays.asList(
-                new Person("John Doe", "123 Road", "johndoe@gmail.com"),
-                new Person("Mark Alex", "456 Road", "ma@gmail.com"),
-                new Company("Big Tech Company", "789 Road", "btc@gmail.com")
+                new Person("John Doe", "123 Road", "testmailforproject1234@gmail.com"),
+                new Person("Mark Alex", "456 Road", "testmailforproject1234@gmail.com"),
+                new Company("Big Tech Company", "789 Road", "testmailforproject1234@gmail.com")
         );
     }
 

@@ -1,6 +1,10 @@
 package model;
 
 public class SmallSafetyDepositBox extends SafetyDepositBox{
+    public SmallSafetyDepositBox(long id){
+        super(id);
+    }
+
     private double capacity;
 
     public double getCapacity() {

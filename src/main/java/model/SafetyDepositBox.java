@@ -5,6 +5,10 @@ public abstract class SafetyDepositBox {
     private long id;
     private Customer customer;
 
+    public SafetyDepositBox(long id){
+        this.id = id;
+    }
+
     public boolean isAllotted(){
         return this.isAllotted;
     }
@@ -15,10 +19,6 @@ public abstract class SafetyDepositBox {
 
     public long getId(){
         return this.id;
-    }
-
-    public void setId(long id){
-        this.id = id;
     }
 
     public Customer getCustomer() {

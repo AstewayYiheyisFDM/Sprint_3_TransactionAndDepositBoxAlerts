@@ -1,5 +1,6 @@
 package service;
 
+import jakarta.mail.MessagingException;
 import model.Account;
 import model.Customer;
 import model.SafetyDepositBox;
@@ -17,13 +18,25 @@ public class AlertServiceTest {
     List<Account> accounts;
     SafetyDepositBox sb;
 
-    public AlertServiceTest(){
+    public AlertServiceTest() {
         customers = SampleDataUtil.getSampleCustomers();
-        sb = new SmallSafetyDepositBox();
+        sb = new SmallSafetyDepositBox(1);
         sb.setCustomer(customers.get(0));
         System.out.println(customers);
         accounts = SampleDataUtil.getSampleAccounts(customers);
         alertService = new AlertService(customers, accounts);
+    }
+
+    @Test
+    public void test_sendTransactionAlert() throws MessagingException {
+        alertService.sendTransactionAlert(customers.get(0).getCUSTOMER_ID(),
+                accounts.get(0), 100.00);
+    }
+
+    @Test
+    public void test_sendDepositBoxAlert(){
+        alertService.sendDepositBoxAlert(sb, true); // for allocated
+        alertService.sendDepositBoxAlert(sb, false); // for released
     }
 
     @Test

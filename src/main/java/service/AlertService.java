@@ -62,13 +62,13 @@ public class AlertService {
         if (isAlloted) {
             supplier = () -> String.format(
                     "Hello %s,%n%nYour safety deposit box with ID %d has been allotted to you.%n%nThank you for banking with us.%nBest regards,%nYour Bank",
-                    sb.getCustomer(),
+                    sb.getCustomer().getName(),
                     sb.getId()
             );
         } else {
             supplier = () -> String.format(
                     "Hello %s,%n%nYour safety deposit box with ID %d has been released.%n%nThank you for banking with us.%nBest regards,%nYour Bank",
-                    sb.getCustomer(),
+                    sb.getCustomer().getName(),
                     sb.getId()
             );
         }
