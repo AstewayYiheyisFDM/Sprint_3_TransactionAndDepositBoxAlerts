@@ -1,5 +1,6 @@
 package service;
 
+import model.Customer;
 import model.SafetyDepositBox;
 import model.SmallSafetyDepositBox;
 
@@ -11,16 +12,18 @@ public class SafetyDepositBoxService {
     private static SafetyDepositBoxService safetyDepositBoxService;
     private List<SafetyDepositBox> safetyDepositBoxes;
     private static int numberOfSafetyDepositBoxes = 2;
+    private AlertService alertService;
 
     private SafetyDepositBoxService(){
         safetyDepositBoxes = new ArrayList<>();
 
         for(int i = 0; i < numberOfSafetyDepositBoxes; i++){
-            SmallSafetyDepositBox sb = new SmallSafetyDepositBox();
-            sb.setId(i);
+            SmallSafetyDepositBox sb = new SmallSafetyDepositBox(i);
             sb.setAllotted(false);
             safetyDepositBoxes.add(sb);
         }
+
+        alertService = new AlertService();
     }
 
     public static SafetyDepositBoxService getInstance(){
@@ -31,7 +34,7 @@ public class SafetyDepositBoxService {
         return safetyDepositBoxService;
     }
 
-    public static int getNumberOfSafetyDepositBoxes() {
+    public static synchronized int getNumberOfSafetyDepositBoxes() {
         return numberOfSafetyDepositBoxes;
     }
 
@@ -39,29 +42,33 @@ public class SafetyDepositBoxService {
         SafetyDepositBoxService.numberOfSafetyDepositBoxes = numberOfSafetyDepositBoxes;
     }
 
-    public synchronized SafetyDepositBox allocateSafetyDepositBox() throws InterruptedException {
+    public synchronized SafetyDepositBox allocateSafetyDepositBox(Customer customer) throws InterruptedException {
         Optional<SafetyDepositBox> safetyDepositBox = getReleasedSafetyDepositBox();
-        boolean isWaiting = false; // just for testing purposes
 
         if(safetyDepositBox.isPresent()){
             SafetyDepositBox sb = safetyDepositBox.get();
+            sb.setCustomer(customer);
             sb.setAllotted(true);
+
+            alertService.sendDepositBoxAlert(sb, true);
 
             return sb;
         }
         else{
+            int size = safetyDepositBoxes.size();
             // if the limit has not been reached, create a new safety deposit box and return it
-            if(numberOfSafetyDepositBoxes > safetyDepositBoxes.size()){
-                SafetyDepositBox sb = new SmallSafetyDepositBox();
+            if(numberOfSafetyDepositBoxes > size){
+                SafetyDepositBox sb = new SmallSafetyDepositBox(size + 1);
+                sb.setCustomer(customer);
                 sb.setAllotted(true);
                 safetyDepositBoxes.add(sb);
+
+                alertService.sendDepositBoxAlert(sb,true);
 
                 return sb;
             }
             else{
-                isWaiting = true;
                 wait();
-                isWaiting = false;
 
                 return getReleasedSafetyDepositBox().orElseThrow(() -> new IllegalStateException("No Boxes found!"));
             }
@@ -72,11 +79,10 @@ public class SafetyDepositBoxService {
         for(SafetyDepositBox box:safetyDepositBoxes){
             if(box.equals(safetyDepositBox)){
                 box.setAllotted(false);
+                box.setCustomer(null);
+                alertService.sendDepositBoxAlert(box, false);
             }
         }
-
-        notify();
-        // safetyDepositBoxes.remove(safetyDepositBox);
     }
 
     public int getNumberOfAvailableSafetyDepositBoxes(){
@@ -98,12 +104,10 @@ public class SafetyDepositBoxService {
             }
         }
 
-        return null;
+        return Optional.of(null);
     }
 
     public List<SafetyDepositBox> getSafetyDepositBoxes() {
         return safetyDepositBoxes;
     }
-
-
 }

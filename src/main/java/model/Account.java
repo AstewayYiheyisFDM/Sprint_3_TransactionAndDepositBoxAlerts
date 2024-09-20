@@ -1,5 +1,7 @@
 package model;
 
+import jakarta.mail.MessagingException;
+
 public class Account {
     private static long nextAccountId = 1_000;
     private final long ACCOUNT_ID;
@@ -29,7 +31,7 @@ public class Account {
         this.balance += amount;
     }
 
-    public double withdraw(double amount){
+    public double withdraw(double amount) throws MessagingException {
         this.balance -= amount;
 
         return amount;

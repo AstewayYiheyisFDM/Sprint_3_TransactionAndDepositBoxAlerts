@@ -10,15 +10,24 @@ public class BankService {
         this.alertService = alertService;
     }
 
-    public void deposit(Account account, double amount) throws MessagingException {
+    public void deposit(Account account, double amount) {
         account.deposit(amount);
 
-        alertService.sendTransactionAlert(account.getCustomer().getCUSTOMER_ID(), account, amount);
+        notifyTransaction(account, amount);
     }
 
     public void withdraw(Account account, double amount) throws MessagingException {
         account.withdraw(amount);
 
-        alertService.sendTransactionAlert(account.getCustomer().getCUSTOMER_ID(), account, amount);
+        notifyTransaction(account, amount);
+    }
+
+    public void notifyTransaction(Account account, double amount) {
+        try{
+            alertService.sendTransactionAlert(account.getCustomer().getCUSTOMER_ID(), account, amount);
+        }
+        catch(MessagingException messagingException){
+            messagingException.printStackTrace();
+        }
     }
 }
