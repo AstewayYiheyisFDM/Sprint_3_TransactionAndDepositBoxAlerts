@@ -2,7 +2,7 @@ package model;
 
 public abstract class SafetyDepositBox {
     private boolean isAllotted;
-    private double id;
+    private long id;
     private Customer customer;
 
     public boolean isAllotted(){
@@ -13,11 +13,11 @@ public abstract class SafetyDepositBox {
         this.isAllotted = isAllotted;
     }
 
-    public double getId(){
+    public long getId(){
         return this.id;
     }
 
-    public void setId(double id){
+    public void setId(long id){
         this.id = id;
     }
 

@@ -2,7 +2,6 @@ package model;
 
 import jakarta.mail.MessagingException;
 import service.AlertService;
-import service.BankService;
 
 public class CheckingAccount extends Account {
     private int nextCheckNumber;
