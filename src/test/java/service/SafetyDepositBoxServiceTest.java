@@ -3,6 +3,7 @@ package service;
 import model.SafetyDepositBox;
 import org.junit.Before;
 import org.junit.Test;
+import util.SampleDataUtil;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,7 +20,7 @@ public class SafetyDepositBoxServiceTest {
         // Test1: Two threads requesting and releasing boxes
         Thread t1 = new Thread(() -> {
             try {
-                SafetyDepositBox box = service.allocateSafetyDepositBox();
+                SafetyDepositBox box = service.allocateSafetyDepositBox(SampleDataUtil.getSampleCustomers().get(0));
                 Thread.sleep(5000);  // Hold the box for 5 seconds
                 service.releaseSafetyDepositBox(box);
             } catch (InterruptedException e) {
@@ -29,7 +30,7 @@ public class SafetyDepositBoxServiceTest {
 
         Thread t2 = new Thread(() -> {
             try {
-                SafetyDepositBox box = service.allocateSafetyDepositBox();
+                SafetyDepositBox box = service.allocateSafetyDepositBox(SampleDataUtil.getSampleCustomers().get(1));
                 Thread.sleep(5000);  // Hold the box for 5 seconds
                 service.releaseSafetyDepositBox(box);
             } catch (InterruptedException e) {
@@ -51,7 +52,7 @@ public class SafetyDepositBoxServiceTest {
         // Test2: Three threads requesting and releasing boxes
         Thread t1 = new Thread(() -> {
             try {
-                SafetyDepositBox box = service.allocateSafetyDepositBox();
+                SafetyDepositBox box = service.allocateSafetyDepositBox(SampleDataUtil.getSampleCustomers().get(2));
                 Thread.sleep(5000);  // Hold the box for 5 seconds
                 service.releaseSafetyDepositBox(box);
             } catch (InterruptedException e) {
@@ -61,7 +62,7 @@ public class SafetyDepositBoxServiceTest {
 
         Thread t2 = new Thread(() -> {
             try {
-                SafetyDepositBox box = service.allocateSafetyDepositBox();
+                SafetyDepositBox box = service.allocateSafetyDepositBox(SampleDataUtil.getSampleCustomers().get(0));
                 Thread.sleep(5000);  // Hold the box for 5 seconds
                 service.releaseSafetyDepositBox(box);
             } catch (InterruptedException e) {
@@ -71,7 +72,7 @@ public class SafetyDepositBoxServiceTest {
 
         Thread t3 = new Thread(() -> {
             try {
-                SafetyDepositBox box = service.allocateSafetyDepositBox();
+                SafetyDepositBox box = service.allocateSafetyDepositBox(SampleDataUtil.getSampleCustomers().get(1));
                 Thread.sleep(5000);  // Hold the box for 5 seconds
                 service.releaseSafetyDepositBox(box);
             } catch (InterruptedException e) {
